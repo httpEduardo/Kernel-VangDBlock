@@ -415,8 +415,8 @@ typedef struct _DRIVER_CONFIG {
 - Capturar snapshot inicial de SSDT, IDT, drivers carregados
 - Calcular hashes de ntoskrnl.exe, hal.dll
 - Registrar callbacks (Process, LoadImage, CreateThread, Registry)
-- Criar device object (`\Device\KernelSecDriver`)
-- Criar symbolic link (`\??\KernelSecDriver`)
+- Criar device object (`\Device\VangDBlockDriver`)
+- Criar symbolic link (`\??\VangDBlockDriver`)
 - Iniciar thread de verificação periódica
 - Inicializar minifilter (se habilitado)
 
@@ -621,7 +621,7 @@ VOID LogEvent(PSECURITY_EVENT event) {
 **Integração ETW:**
 ```c
 // Registrar provider
-EventRegister(&GUID_KERNELSEC_PROVIDER, NULL, NULL, &RegHandle);
+EventRegister(&GUID_VANGDBLOCK_PROVIDER, NULL, NULL, &RegHandle);
 
 // Escrever evento
 EventWriteString(RegHandle, 0, 0, event->Description);
@@ -670,10 +670,10 @@ FLT_PREOP_CALLBACK_STATUS PreWriteCallback(
 ### IOCTL Codes (DeviceIoControl)
 
 ```c
-#define IOCTL_KERNELSEC_GET_CONFIG    CTL_CODE(FILE_DEVICE_UNKNOWN, 0x800, METHOD_BUFFERED, FILE_ANY_ACCESS)
-#define IOCTL_KERNELSEC_SET_CONFIG    CTL_CODE(FILE_DEVICE_UNKNOWN, 0x801, METHOD_BUFFERED, FILE_ANY_ACCESS)
-#define IOCTL_KERNELSEC_GET_EVENTS    CTL_CODE(FILE_DEVICE_UNKNOWN, 0x802, METHOD_BUFFERED, FILE_READ_ACCESS)
-#define IOCTL_KERNELSEC_ADD_WHITELIST CTL_CODE(FILE_DEVICE_UNKNOWN, 0x803, METHOD_BUFFERED, FILE_ANY_ACCESS)
+#define IOCTL_VANGDBLOCK_GET_CONFIG    CTL_CODE(FILE_DEVICE_UNKNOWN, 0x800, METHOD_BUFFERED, FILE_ANY_ACCESS)
+#define IOCTL_VANGDBLOCK_SET_CONFIG    CTL_CODE(FILE_DEVICE_UNKNOWN, 0x801, METHOD_BUFFERED, FILE_ANY_ACCESS)
+#define IOCTL_VANGDBLOCK_GET_EVENTS    CTL_CODE(FILE_DEVICE_UNKNOWN, 0x802, METHOD_BUFFERED, FILE_READ_ACCESS)
+#define IOCTL_VANGDBLOCK_ADD_WHITELIST CTL_CODE(FILE_DEVICE_UNKNOWN, 0x803, METHOD_BUFFERED, FILE_ANY_ACCESS)
 ```
 
 ### Dispatcher IOCTL
@@ -687,7 +687,7 @@ NTSTATUS DeviceIoControlDispatcher(
     ULONG controlCode = stack->Parameters.DeviceIoControl.IoControlCode;
     
     switch (controlCode) {
-        case IOCTL_KERNELSEC_SET_CONFIG:
+        case IOCTL_VANGDBLOCK_SET_CONFIG:
             // Validar tamanho do buffer
             if (stack->Parameters.DeviceIoControl.InputBufferLength == sizeof(DRIVER_CONFIG)) {
                 PDRIVER_CONFIG newConfig = (PDRIVER_CONFIG)Irp->AssociatedIrp.SystemBuffer;
@@ -699,7 +699,7 @@ NTSTATUS DeviceIoControlDispatcher(
             }
             break;
             
-        case IOCTL_KERNELSEC_GET_EVENTS:
+        case IOCTL_VANGDBLOCK_GET_EVENTS:
             // Copiar eventos do buffer circular
             PSECURITY_EVENT outBuffer = (PSECURITY_EVENT)Irp->AssociatedIrp.SystemBuffer;
             ULONG maxEvents = stack->Parameters.DeviceIoControl.OutputBufferLength / sizeof(SECURITY_EVENT);
@@ -726,7 +726,7 @@ NTSTATUS DeviceIoControlDispatcher(
 2. Usar Windows Hardware Dev Center para attestation signing
 3. Assinar arquivo .sys com SignTool:
    ```cmd
-   signtool sign /v /fd sha256 /tr http://timestamp.digicert.com /td sha256 /sha1 <cert_thumbprint> KernelSecDriver.sys
+   signtool sign /v /fd sha256 /tr http://timestamp.digicert.com /td sha256 /sha1 <cert_thumbprint> VangDBlockDriver.sys
    ```
 
 **Alternativa para Teste:**
@@ -746,7 +746,7 @@ NTSTATUS DeviceIoControlDispatcher(
 
 **Service (User-Mode):**
 - SeServiceLogonRight: rodar como serviço
-- Acesso ao device object: `\\.\KernelSecDriver`
+- Acesso ao device object: `\\.\VangDBlockDriver`
 - Privilégios mínimos (princípio de least privilege)
 
 ### Proteção Contra Unload Malicioso
@@ -785,7 +785,7 @@ VOID DriverUnload(PDRIVER_OBJECT DriverObject) {
 **1. Via Service de Controle:**
 ```c
 // User-mode envia IOCTL para desabilitar proteções
-DeviceIoControl(hDevice, IOCTL_KERNELSEC_DISABLE_PROTECTION, ...);
+DeviceIoControl(hDevice, IOCTL_VANGDBLOCK_DISABLE_PROTECTION, ...);
 
 // Driver restaura estado original:
 // - Remove hooks próprios (se houver)
@@ -795,9 +795,9 @@ DeviceIoControl(hDevice, IOCTL_KERNELSEC_DISABLE_PROTECTION, ...);
 
 **2. Desinstalação Completa:**
 ```cmd
-sc stop KernelSecDriver
-sc delete KernelSecDriver
-del C:\Windows\System32\drivers\KernelSecDriver.sys
+sc stop VangDBlockDriver
+sc delete VangDBlockDriver
+del C:\Windows\System32\drivers\VangDBlockDriver.sys
 ```
 
 ### Modo Seguro (Safe Mode)
@@ -859,7 +859,7 @@ del C:\Windows\System32\drivers\KernelSecDriver.sys
                        ▼
                 ┌──────────────────────┐
                 │  Driver Kernel-Mode  │
-                │  (KernelSecDriver)   │
+                │  (VangDBlockDriver)  │
                 ├──────────────────────┤
                 │ - Monitor            │
                 │ - Análise            │

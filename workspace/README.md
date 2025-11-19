@@ -1,4 +1,4 @@
-# 🛡️ KernelSec Project - Sistema de Cibersegurança em Nível de Kernel
+# 🛡️ Kernel VangDBlock - Sistema de Cibersegurança em Nível de Kernel
 
 [![Windows](https://img.shields.io/badge/Windows-10%2F11-0078D6?logo=windows&logoColor=white)](https://www.microsoft.com/windows)
 [![C++](https://img.shields.io/badge/C%2B%2B-Driver-00599C?logo=cplusplus&logoColor=white)](https://isocpp.org/)
