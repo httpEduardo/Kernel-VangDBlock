@@ -1,0 +1,16 @@
+# Build Output Directory
+# Gerado automaticamente pelo Visual Studio e MSBuild
+
+/Debug/
+/Release/
+/x64/
+/intermediate/
+
+*.sys
+*.pdb
+*.obj
+*.log
+*.idb
+*.ilk
+*.exp
+*.lib

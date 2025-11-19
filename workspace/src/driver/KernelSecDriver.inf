@@ -1,0 +1,60 @@
+;
+; KernelSecDriver.inf
+; Sistema Avançado de Cibersegurança em Nível de Kernel
+;
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=System
+ClassGuid={4d36e97d-e325-11ce-bfc1-08002be10318}
+Provider=%ManufacturerName%
+CatalogFile=KernelSecDriver.cat
+DriverVer=11/19/2025,1.0.0.0
+PnpLockdown=1
+
+[DestinationDirs]
+DefaultDestDir = 12
+KernelSecDriver_Device_CoInstaller_CopyFiles = 11
+
+[SourceDisksNames]
+1 = %DiskName%,,,""
+
+[SourceDisksFiles]
+KernelSecDriver.sys  = 1,,
+
+[Manufacturer]
+%ManufacturerName%=Standard,NTamd64
+
+[Standard.NTamd64]
+%KernelSecDriver.DeviceDesc%=KernelSecDriver_Device, Root\KernelSecDriver
+
+[KernelSecDriver_Device.NT]
+CopyFiles=Drivers_Dir
+
+[Drivers_Dir]
+KernelSecDriver.sys
+
+[KernelSecDriver_Device.NT.Services]
+AddService = KernelSecDriver,%SPSVCINST_ASSOCSERVICE%, KernelSecDriver_Service_Inst
+
+[KernelSecDriver_Service_Inst]
+DisplayName    = %KernelSecDriver.SVCDESC%
+ServiceType    = 1               ; SERVICE_KERNEL_DRIVER
+StartType      = 3               ; SERVICE_DEMAND_START
+ErrorControl   = 1               ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\KernelSecDriver.sys
+LoadOrderGroup = FSFilter Security Enhancer
+Dependencies   = FltMgr
+
+[KernelSecDriver_Device.NT.Wdf]
+KmdfService =  KernelSecDriver, KernelSecDriver_wdfsect
+
+[KernelSecDriver_wdfsect]
+KmdfLibraryVersion = 1.15
+
+[Strings]
+SPSVCINST_ASSOCSERVICE= 0x00000002
+ManufacturerName="KernelSec Research"
+DiskName = "KernelSec Driver Installation Disk"
+KernelSecDriver.DeviceDesc = "KernelSec Advanced Kernel Security Driver"
+KernelSecDriver.SVCDESC = "KernelSec Kernel-Mode Security Monitor"

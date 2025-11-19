@@ -1,0 +1,18 @@
+﻿# KernelSec Project
+
+Advanced Windows Kernel-Mode Security Monitor
+
+## Build Output
+build/
+*.sys
+*.pdb
+*.obj
+
+## Visual Studio
+.vs/
+*.user
+*.suo
+
+## Temporary
+*.tmp
+*.log
