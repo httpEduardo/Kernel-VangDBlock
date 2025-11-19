@@ -1,8 +1,8 @@
-# PROMPT TÉCNICO: Sistema de Cibersegurança em Nível de Kernel para Windows
+# Especificação Técnica: Sistema de Cibersegurança em Nível de Kernel para Windows
 
-## CONTEXTO DO PROJETO
+## Visão Geral
 
-Desenvolver um mecanismo avançado de cibersegurança que opera em **Kernel-mode** no Windows (NT Kernel), focado em **detecção e resposta automática** contra tentativas de interceptação, manipulação ou exploração de componentes internos do kernel.
+Mecanismo avançado de cibersegurança que opera em **Kernel-mode** no Windows (NT Kernel), focado em **detecção e resposta automática** contra tentativas de interceptação, manipulação ou exploração de componentes internos do kernel.
 
 ---
 
@@ -1001,18 +1001,13 @@ del C:\Windows\System32\drivers\KernelSecDriver.sys
 
 ---
 
-## PRÓXIMOS PASSOS
+## Ambiente de Desenvolvimento
 
-1. **Revisar este documento técnico** e solicitar esclarecimentos, se necessário
-2. **Validar arquitetura** com stakeholders
-3. **Criar diagramas C4 detalhados** (usar Draw.io, Mermaid, ou PlantUML)
-4. **Definir prioridades** de features (MVP vs. full scope)
-5. **Iniciar Fase 1** (Fundação) conforme roadmap
-6. **Estabelecer ambiente de desenvolvimento:**
-   - Windows 10/11 com WDK instalado
-   - Visual Studio 2022
-   - VM de teste (snapshot antes de cada teste)
-   - Debugger kernel (WinDbg + serial connection)
+### Requisitos
+- Windows 10/11 com WDK instalado
+- Visual Studio 2022
+- VM de teste com snapshots configurados
+- WinDbg para debugging kernel (conexão serial)
 
 ---
 
@@ -1030,10 +1025,4 @@ del C:\Windows\System32\drivers\KernelSecDriver.sys
 - **ELAM**: Early Launch Anti-Malware
 - **BYOVD**: Bring Your Own Vulnerable Driver
 
----
 
-**DOCUMENTO GERADO PARA:**
-- Projeto: Sistema de Cibersegurança Kernel-Mode Windows
-- Data: 2025-11-19
-- Destinatário: Codex / Compile LUT
-- Autor: GitHub Copilot (Claude Sonnet 4.5)
