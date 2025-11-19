@@ -279,7 +279,6 @@ This project is released under a **Research License**. See [LICENSE](LICENSE) fo
 <div align="center">
 
 **Made with 🛡️ for Windows Security Research**
-
-⭐ Star this repository if you find it useful!
+Made by: Void
 
 </div>
