@@ -273,6 +273,7 @@ This project is released under a **Research License**. See [LICENSE](LICENSE) fo
 ## 📞 Contact
 
 - **Project**: [Kernel VangDBlock](https://github.com/httpEduardo/Kernel-VangDBlock)
+    Made by: Void
 
 ---
 
