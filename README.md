@@ -272,8 +272,7 @@ This project is released under a **Research License**. See [LICENSE](LICENSE) fo
 
 ## 📞 Contact
 
-- **GitHub**: [@eduardomb08](https://github.com/eduardomb08)
-- **Project**: [Kernel VangDBlock](https://github.com/eduardomb08/Kernel-VangDBlock)
+- **Project**: [Kernel VangDBlock](https://github.com/httpEduardo/Kernel-VangDBlock)
 
 ---
 
